@@ -8,6 +8,6 @@ export const uploadPDF = (file) => {
     return axios.post(`${API_BASE}/upload`, formData);
 };
 
-export const askQuestion = (messages, context) => {
-    return axios.post(`${API_BASE}/ask`, { messages, context });
+export const askQuestion = (messages) => {
+    return axios.post(`${API_BASE}/ask`, { messages });
 };

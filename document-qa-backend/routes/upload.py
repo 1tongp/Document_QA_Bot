@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from services.pdf_service import extract_text_from_pdf
+from services.session_state import document_chunks
+from services.pdf_service import extract_text_from_pdf, chunk_text
 
 upload_blueprint = Blueprint('upload', __name__)
 
@@ -10,4 +11,6 @@ def upload_pdf():
         return jsonify({'error': 'No file uploaded'}), 400
 
     text = extract_text_from_pdf(file)
-    return jsonify({'text': text})
+    document_chunks.clear()
+    document_chunks.extend(chunk_text(text))
+    return jsonify({'message': f'{len(document_chunks)} chunks indexed.'})

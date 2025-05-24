@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+# CORS(app, resources={r"/*": {"origins": ["http://localhost:3000"]}})
 
 # Register endpoints
 app.register_blueprint(ask_blueprint)

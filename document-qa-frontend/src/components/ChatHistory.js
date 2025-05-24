@@ -12,6 +12,9 @@ function ChatHistory({ messages }) {
                     <div className="bubble-content">
                         <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong> {msg.content}
                     </div>
+                    <div className="bubble-content">
+                        <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong> {msg.context}
+                    </div>
                     <div className="timestamp">{msg.time}</div>
                 </div>
             ))}

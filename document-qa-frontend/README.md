@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# 🧠 Document QA Bot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack AI-powered chatbot that answers questions based on user-uploaded documents using semantic search and OpenAI's GPT.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+* Upload PDFs and extract document content.
+* Embed document content using SentenceTransformers.
+* Use FAISS for fast semantic search.
+* Ask questions and get contextually relevant answers from OpenAI.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 💠 Setup Instructions
 
-### `npm test`
+### 1. Clone the repo
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/1tongp/Document_QA_Bot.git
+cd document-qa-bot
+```
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. Set up the backend (Flask + Python)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+cd document-qa-backend
+python3 -m venv venv
+source venv/bin/activate  # macOS/Linux
+# venv\Scripts\activate   # Windows
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+pip install -r requirements.txt
+```
 
-### `npm run eject`
+Create a `.env` file in `document-qa-backend/` and add your OpenAI key:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+OPENAI_API_KEY=your-api-key-here
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 3. Set up the frontend (React)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+cd ../document-qa-frontend
+npm install
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 4. Start both servers
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+From the project root (`document-qa-bot`):
 
-### Code Splitting
+```bash
+npm install
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This runs:
 
-### Analyzing the Bundle Size
+* Flask backend at: `http://127.0.0.1:5000`
+* React frontend at: `http://localhost:3000`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 🧪 Test the App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. Open your browser at `http://localhost:3000`.
+2. Upload a PDF.
+3. Ask a question about the document.
+4. The app performs semantic search on the uploaded content and generates a GPT-powered answer.
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 🛠️ Tech Stack
 
-### Deployment
+* **Frontend**: React + Axios
+* **Backend**: Flask + Flask-CORS
+* **AI**: SentenceTransformers (`all-MiniLM-L6-v2`), OpenAI Chat Completion
+* **Vector DB**: FAISS
+* **Document Parsing**: PyMuPDF or pdfplumber
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 🧼 Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* If you get CORS errors, ensure Flask has `flask-cors` configured correctly.
+* Use `Ctrl+Shift+R` to hard refresh your frontend after backend changes.
+* Ensure your `.env` is loaded before running Flask.
+
+---
+
+## 📌 Notes
+
+* This version uses in-memory FAISS index. In production, you should use a persistent store or per-user indexing.
+* Chunking is basic; you can improve it by using sentence/paragraph splitters.
+
+---
+
+## 📄 License
+
+MIT License

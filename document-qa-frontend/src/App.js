@@ -1,64 +1,60 @@
 // import React, { useState } from 'react';
-// import axios from 'axios';
+// import FileUpload from './components/FileUpload';
+// import QuestionBox from './components/QuestionBox';
+// import ChatHistory from './components/ChatHistory';
+// import { uploadPDF, askQuestion } from './services/api';
 
 // function App() {
-//   const [file, setFile] = useState(null);
 //   const [text, setText] = useState('');
-//   const [question, setQuestion] = useState('');
-//   const [answer, setAnswer] = useState('');
+//   const [chatHistory, setChatHistory] = useState([]);
 
-//   const handleFileChange = (e) => {
-//     setFile(e.target.files[0]);
+//   const handlePDFUpload = async (file) => {
+//     try {
+//       const res = await uploadPDF(file);
+//       setText(res.data.text);
+//       setChatHistory([]);  
+//     } catch (err) {
+//       console.error("Upload failed:", err);
+//     }
 //   };
 
-//   const handleUpload = async () => {
-//     const formData = new FormData();
-//     formData.append('file', file);
 
-//     const response = await axios.post('http://127.0.0.1:5000/upload', formData);
-//     setText(response.data.text);
+//   const MAX_MESSAGES = 12;  // e.g. last 6 user+bot exchanges
+
+//   const handleAsk = async (question) => {
+//     const newUserMsg = {
+//       role: 'user',
+//       content: question,
+//       time: new Date().toLocaleTimeString()
+//     };
+//     const updatedMessages = [...chatHistory, newUserMsg];
+//     const trimmedMessages = updatedMessages.slice(-MAX_MESSAGES);
+//     try {
+//       const res = await askQuestion(trimmedMessages, text);
+//       const botMsg = {
+//         role: 'assistant',
+//         content: res.data.answer,
+//         time: new Date().toLocaleTimeString()
+//       };
+
+//       setChatHistory([...updatedMessages, botMsg]);
+//     } catch (err) {
+//       console.error("Ask failed", err);
+//     }
 //   };
 
-//   const handleAsk = async () => {
-//     const response = await axios.post('http://127.0.0.1:5000/ask', {
-//       question,
-//       context: text
-//     });
-//     setAnswer(response.data.answer);
-//   };
 
 //   return (
-//     <div style={{ padding: '2rem' }}>
-//       <h2>📄 Document Q&A Chatbot</h2>
-
-//       <input type="file" onChange={handleFileChange} />
-//       <button onClick={handleUpload}>Upload PDF</button>
-
-//       {text && (
-//         <>
-//           <h4>Ask a question:</h4>
-//           <input
-//             type="text"
-//             value={question}
-//             onChange={(e) => setQuestion(e.target.value)}
-//             style={{ width: '300px' }}
-//           />
-//           <button onClick={handleAsk}>Ask</button>
-//         </>
-//       )}
-
-//       {answer && (
-//         <>
-//           <h4>🧠 Answer:</h4>
-//           <p>{answer}</p>
-//         </>
-//       )}
+//     <div>
+//       <h2>Document Q&A Bot</h2>
+//       <FileUpload onUpload={handlePDFUpload} />
+//       <QuestionBox onAsk={handleAsk} />
+//       <ChatHistory messages={chatHistory} />
 //     </div>
 //   );
 // }
 
 // export default App;
-
 
 import React, { useState } from 'react';
 import FileUpload from './components/FileUpload';
@@ -67,21 +63,20 @@ import ChatHistory from './components/ChatHistory';
 import { uploadPDF, askQuestion } from './services/api';
 
 function App() {
-  const [text, setText] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
+  const [contextChunks, setContextChunks] = useState([]);
 
   const handlePDFUpload = async (file) => {
     try {
-      const res = await uploadPDF(file);
-      setText(res.data.text);
-      setChatHistory([]);  
+      await uploadPDF(file);
+      setChatHistory([]);  // Clear chat after new upload
+      setContextChunks([]);
     } catch (err) {
       console.error("Upload failed:", err);
     }
   };
 
-
-  const MAX_MESSAGES = 12;  // e.g. last 6 user+bot exchanges
+  const MAX_MESSAGES = 12;
 
   const handleAsk = async (question) => {
     const newUserMsg = {
@@ -91,20 +86,23 @@ function App() {
     };
     const updatedMessages = [...chatHistory, newUserMsg];
     const trimmedMessages = updatedMessages.slice(-MAX_MESSAGES);
+
     try {
-      const res = await askQuestion(trimmedMessages, text);
+      const res = await askQuestion(trimmedMessages); // <-- No more text
       const botMsg = {
         role: 'assistant',
         content: res.data.answer,
+        chunks: res.data.context_chunks || [],
+        context: res.data.context || '',
         time: new Date().toLocaleTimeString()
       };
 
       setChatHistory([...updatedMessages, botMsg]);
+      setContextChunks(res.data.context_chunks || []);
     } catch (err) {
       console.error("Ask failed", err);
     }
   };
-
 
   return (
     <div>
@@ -112,6 +110,19 @@ function App() {
       <FileUpload onUpload={handlePDFUpload} />
       <QuestionBox onAsk={handleAsk} />
       <ChatHistory messages={chatHistory} />
+
+      {contextChunks.length > 0 && (
+        <div style={{ padding: '1rem', marginTop: '1rem', backgroundColor: '#f9f9f9' }}>
+          <h4>📄 Context Used:</h4>
+          <ul>
+            {contextChunks.map((chunk, idx) => (
+              <li key={idx} style={{ marginBottom: '0.5rem' }}>
+                <pre style={{ whiteSpace: 'pre-wrap' }}>{chunk}</pre>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
