@@ -1,6 +1,17 @@
 import pdfplumber
 import nltk
 from nltk.tokenize import sent_tokenize
+import ssl
+from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download('punkt')
 
 def extract_text_from_pdf(file):
     text = ''
@@ -11,21 +22,22 @@ def extract_text_from_pdf(file):
                 text += page_text + "\n"
     return text
 
-def chunk_text(text, max_chunk_chars=1000):
-    import textwrap
-    chunks = textwrap.wrap(text, max_chunk_chars)
-    return chunks
+def chunk_text(text, max_tokens=500, overlap=50):
+    tokenizer = PunktSentenceTokenizer()
+    sentences = tokenizer.tokenize(text)
+    chunks, current_chunk = [], []
+    current_length = 0
 
+    for sentence in sentences:
+        tokens = sentence.split()
+        if current_length + len(tokens) > max_tokens:
+            chunks.append(" ".join(current_chunk))
+            current_chunk = current_chunk[-overlap:]  # Overlap
+            current_length = len(current_chunk)
+        current_chunk.extend(tokens)
+        current_length += len(tokens)
 
-nltk.download("punkt")
-
-def advanced_chunk_text(text, max_sentences=5, stride=3):
-    sentences = sent_tokenize(text)
-    chunks = []
-
-    for i in range(0, len(sentences), stride):
-        chunk = " ".join(sentences[i:i + max_sentences])
-        if chunk:
-            chunks.append(chunk)
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
 
     return chunks

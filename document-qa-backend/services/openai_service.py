@@ -1,7 +1,19 @@
-from openai import OpenAI
+import openai
 import os
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def get_embeddings(text_list, model="text-embedding-3-small"):
+    """
+    Embeds a list of text chunks using OpenAI's embedding API.
+    """
+    response = openai.embeddings.create(
+        model=model,
+        input=text_list
+    )
+    return [record.embedding for record in response.data]
+
 
 def get_openai_answer(messages, context=""):
     if context:
@@ -17,4 +29,14 @@ def get_openai_answer(messages, context=""):
         max_tokens=300
     )
     
+    return response.choices[0].message.content.strip()
+
+def ask_llm(prompt, model="gpt-4"):
+    response = openai.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
     return response.choices[0].message.content.strip()
