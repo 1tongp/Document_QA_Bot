@@ -16,7 +16,8 @@ function VectorDBInfo() {
 
 const styles = {
   container: {
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: 'Inter, sans-serif',
+    padding: 0,
   },
   title: {
     ...Styles.heading3,

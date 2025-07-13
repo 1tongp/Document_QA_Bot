@@ -11,3 +11,11 @@ export const uploadPDF = (file) => {
 export const askQuestion = (messages) => {
     return axios.post(`${API_BASE}/ask`, { messages });
 };
+
+export const requestPassword = async () => {
+    return axios.get('/generate-code');
+};
+
+export const verifyPassword = async (code) => {
+    return axios.post('/verify-code', { code });
+};

@@ -32,10 +32,24 @@ def get_openai_answer(messages, context=""):
     return response.choices[0].message.content.strip()
 
 def ask_llm(prompt, model="gpt-4"):
+    system_prompt = """
+You are an expert assistant designed for document-based question answering using a combination of internal knowledge and user-provided documents (retrieval-augmented generation).
+
+Your goal is to help users understand or extract information from documents.
+
+Instructions:
+- Always prioritize using the provided document context if it is relevant and sufficient.
+- Use your general knowledge only to clarify, explain, or define concepts—not to fabricate specific answers.
+- Be accurate, evidence-based, and avoid assumptions or speculation.
+- If the context does not support a definitive answer, say: "I'm not sure based on the document provided."
+- If the question is unrelated to the document, say: "This question doesn't appear to be related to the document provided."
+- Keep responses clear, concise, and helpful.
+"""
+
     response = openai.chat.completions.create(
         model=model,
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ]
     )

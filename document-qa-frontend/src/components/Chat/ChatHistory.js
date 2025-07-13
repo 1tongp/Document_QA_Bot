@@ -1,8 +1,10 @@
 import React from 'react';
+import Layout from '../../Constants/Layout';
 
-function ChatHistory({ messages }) {
+function ChatHistory({ messages, showVectorPanel }) {
+
     return (
-        <div style={styles.chatContainer}>
+        <div style={styles.chatContainer(showVectorPanel)}>
             {messages.map((msg, index) => (
                 <div
                     key={index}
@@ -12,11 +14,21 @@ function ChatHistory({ messages }) {
                     }}
                 >
                     <div style={styles.bubbleContent}>
-                        <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong> {msg.content}
+                        <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong>
+                        {msg.role === 'bot' ? (
+                            msg.content.split(/\n{2,}|\.\s+/).map((line, i) => (
+                                <div key={i} style={{ marginTop: '4px' }}>
+                                    {line.trim()}
+                                </div>
+                            ))
+                        ) : (
+                            ` ${msg.content}`
+                        )}
                     </div>
-                    <div style={styles.bubbleContent}>
+
+                    {/* <div style={styles.bubbleContent}>
                         <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong> {msg.context}
-                    </div>
+                    </div> */}
                     <div style={styles.timestamp}>{msg.time}</div>
                 </div>
             ))}
@@ -25,15 +37,16 @@ function ChatHistory({ messages }) {
 }
 
 const styles = {
-    chatContainer: {
+    chatContainer: (showVectorPanel) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: '0.5rem',
         marginTop: '1rem',
-        maxWidth: '600px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
+        marginLeft: Layout.smallMargin,
+        maxWidth: showVectorPanel ? 'calc(100% - 85px)' : '95%',
+        transition: 'max-width 0.3s ease-in-out',
+    }),
+    
     chatBubble: {
         padding: '10px 14px',
         borderRadius: '16px',
