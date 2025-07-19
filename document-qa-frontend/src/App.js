@@ -12,7 +12,6 @@ function App() {
   const [uploadedDocs, setUploadedDocs] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
 
   const MAX_MESSAGES = 12;
 
@@ -67,40 +66,35 @@ function App() {
     }
   };
 
-  console.log("App mounted with user:", user);
-  return (
-    <>
-      <header style={styles.header}>
-        <h2>📄 Document QA Bot</h2>
-        {isLoggedIn ? (
-          <div style={styles.profileIcon} onClick={() => window.location.href = '/profile'}>
-            {user?.username?.charAt(0).toUpperCase() || 'U'}
-          </div>
-        ) : (
-          <button onClick={() => setShowLogin(true)} style={styles.loginButton}>
-            Login
-          </button>
-        )}
-      </header>
-
-      {!isLoggedIn && showLogin && (
+  if (!isLoggedIn) {
+    return (
+      <div style={styles.loginContainer}>
         <Login
           onLogin={(userInfo) => {
             setIsLoggedIn(true);
             setUser(userInfo);
-            setShowLogin(false);
           }}
         />
-      )}
-      {isLoggedIn && (
-        <MainLayout
-          messages={chatHistory}
-          onUpload={(file) => handlePDFUpload(file, user)} 
-          onAsk={handleAsk}
-          uploadedDocs={uploadedDocs}
-          user={user}
-        />
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <header style={styles.header}>
+        <h2>📄 Document QA Bot</h2>
+        <div style={styles.profileIcon} onClick={() => window.location.href = '/profile'}>
+          {user?.username?.charAt(0).toUpperCase() || 'U'}
+        </div>
+      </header>
+
+      <MainLayout
+        messages={chatHistory}
+        onUpload={(file) => handlePDFUpload(file, user)}
+        onAsk={handleAsk}
+        uploadedDocs={uploadedDocs}
+        user={user}
+      />
     </>
   );
 }
@@ -125,14 +119,13 @@ const styles = {
     cursor: 'pointer',
     fontSize: '18px',
   },
-  loginButton: {
-    backgroundColor: '#555',
-    color: '#fff',
-    padding: '6px 12px',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  }
+  loginContainer: {
+    padding: '40px',
+    textAlign: 'center',
+  },
+  title: {
+    marginBottom: '20px',
+  },
 };
 
 export default App;
