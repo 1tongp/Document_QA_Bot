@@ -28,9 +28,14 @@ def login():
 
     user = db.query(User).filter_by(username=data['username']).first()
     if user and check_password_hash(user.password_hash, data['password']):
-        session['user_id'] = user.id
+        session['user_id'] = user.id  # Optional, if you still want session tracking
+        user_data = {
+            'id': user.id,
+            'username': user.username
+        }
         db.close()
-        return jsonify({'message': 'Login successful'}), 200
+        return jsonify({'message': 'Login successful', 'user': user_data}), 200
 
     db.close()
     return jsonify({'error': 'Invalid credentials'}), 401
+

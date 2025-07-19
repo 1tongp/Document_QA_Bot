@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import UserFilesSidebar from "../components/Sidebar/UserFilesSidebar";
 import FileUpload from "../components/Upload/FileUpload";
 import ChatHistory from "../components/Chat/ChatHistory";
 import QuestionBox from "../components/Chat/QuestionBox";
@@ -9,7 +9,7 @@ import { Colors } from "../Constants/Colors";
 import { Styles } from "../Constants/Styles";
 import Layout from "../Constants/Layout";
 
-function MainLayout({ messages, onUpload, onAsk, uploadedDocs }) {
+function MainLayout({ messages, onUpload, onAsk, uploadedDocs, user }) {
   const [showVectorPanel, setShowVectorPanel] = useState(false);
   const [activeDocIndex, setActiveDocIndex] = useState(0);
 
@@ -23,11 +23,13 @@ function MainLayout({ messages, onUpload, onAsk, uploadedDocs }) {
   return (
     <div style={styles.mainLayout}>
       <div style={styles.sidebar}>
-        <Sidebar
-          documents={documents}
+        <UserFilesSidebar
           activeIndex={activeDocIndex}
           onSelect={setActiveDocIndex}
+          user={user}
         />
+
+
       </div>
       <div
         style={{
