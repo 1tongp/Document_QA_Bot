@@ -16,7 +16,7 @@ def ask_question():
         print("🧠 User query:", user_query)
 
         # 🧠 No document uploaded: respond with special message instead of error
-        if len(vector_store.text_chunks) == 0:
+        if vector_store.collection.count() == 0:
             return jsonify({
                 "answer": "⚠️ Please upload a document before asking a question.",
                 "context": "",
@@ -27,9 +27,9 @@ def ask_question():
         # 1. Embed user query
         question_embedding = get_embeddings([user_query])[0]
 
-        # 2. Search FAISS
+        # 2. Search ChromaDB
         top_chunks = vector_store.search(question_embedding, k=5)
-        if not top_chunks:
+        if not top_chunks or len(top_chunks) == 0:
             return jsonify({
                 'answer': "🤔 No relevant context found in the document.",
                 'context': "",

@@ -92,7 +92,11 @@ This runs:
 * If you get CORS errors, ensure Flask has `flask-cors` configured correctly.
 * Use `Ctrl+Shift+R` to hard refresh your frontend after backend changes.
 * Ensure your `.env` is loaded before running Flask.
+If something is already running on 3000
+Solution 1: list of projects running on 3000 `lsof -i :3000` 
+            Then kill the project `kill -9 <PID>`
 
+Solution 2: `PORT=3001 npm start` Run on another port 
 ---
 
 ## 📌 Notes

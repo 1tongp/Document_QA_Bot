@@ -22,9 +22,11 @@ def upload_pdf():
         embeddings = get_embeddings(chunks)
 
         # Clear previous content, add new
-        vector_store.index.reset()
-        vector_store.text_chunks.clear()
+        vector_store.client.delete_collection("vectorstore")
+        vector_store.collection = vector_store.client.get_or_create_collection("vectorstore")
+        vector_store.counter = 0
         vector_store.add(embeddings, chunks)
+
 
         return jsonify({
             'message': f'{len(chunks)} chunks indexed.',
