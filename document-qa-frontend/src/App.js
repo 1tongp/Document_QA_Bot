@@ -135,21 +135,21 @@ function App() {
   //   requestPassword(); // auto-send the code when page loads
   // }, []);
 
-  if (!accessGranted) {
-    return (
-      <div style={{ padding: '50px', textAlign: 'center' }}>
-        <h2>🔒 Enter Access Code</h2>
-        <input
-          type="text"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter code"
-        />
-        <button onClick={handleSubmit}>Submit</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </div>
-    );
-  }
+  // if (!accessGranted) {
+  //   return (
+  //     <div style={{ padding: '50px', textAlign: 'center' }}>
+  //       <h2>🔒 Enter Access Code</h2>
+  //       <input
+  //         type="text"
+  //         value={password}
+  //         onChange={(e) => setPassword(e.target.value)}
+  //         placeholder="Enter code"
+  //       />
+  //       <button onClick={handleSubmit}>Submit</button>
+  //       {error && <p style={{ color: 'red' }}>{error}</p>}
+  //     </div>
+  //   );
+  // }
 
   return (
     <MainLayout

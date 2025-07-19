@@ -28,7 +28,6 @@ def home():
 def generate_code():
     global current_code
     current_code = "123456"  # 🔐 Hardcoded 6-digit code for testing
-    print("Generated code:", current_code)
     return jsonify({'success': True, 'message': 'Code generated.'})
 
 # def generate_code():
@@ -66,7 +65,7 @@ def verify_code():
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+# if __name__ == '__main__':
+#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

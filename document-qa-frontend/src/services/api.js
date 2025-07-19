@@ -13,9 +13,9 @@ export const askQuestion = (messages) => {
 };
 
 export const requestPassword = async () => {
-    return axios.get('/generate-code');
+    return axios.get(`${API_BASE}/generate-code`);
 };
 
 export const verifyPassword = async (code) => {
-    return axios.post('/verify-code', { code });
+    return axios.post(`${API_BASE}/verify-code`, { code });
 };
