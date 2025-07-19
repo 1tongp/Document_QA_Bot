@@ -36,25 +36,73 @@ function App() {
     const updatedMessages = [...chatHistory, newUserMsg];
     const trimmedMessages = updatedMessages.slice(-MAX_MESSAGES);
 
+    // Add "Bot is typing..." placeholder
+    const placeholderBotMsg = {
+      role: 'bot',
+      content: 'Bot is typing...',
+      chunks: [],
+      context: '',
+      time: new Date().toLocaleTimeString()
+    };
+    const interimMessages = [...trimmedMessages, placeholderBotMsg];
+    setChatHistory(interimMessages);
+
     try {
       const res = await askQuestion(trimmedMessages);
+
       if (res.data.warning === 'no_document') {
         alert("📄 Please upload a document before asking.");
         return;
       }
-      const botMsg = {
+
+      const realBotMsg = {
         role: 'bot',
         content: res.data.answer,
         chunks: res.data.chunks_used || [],
         context: res.data.context || '',
         time: new Date().toLocaleTimeString()
       };
-      setChatHistory([...updatedMessages, botMsg]);
+
+      // Replace the placeholder with the real answer
+      const finalMessages = [...trimmedMessages, realBotMsg];
+      setChatHistory(finalMessages);
       setContextChunks(res.data.chunks_used || []);
+
     } catch (err) {
       console.error("Ask failed", err);
     }
   };
+  
+
+
+  // const handleAsk = async (question) => {
+  //   const newUserMsg = {
+  //     role: 'user',
+  //     content: question,
+  //     time: new Date().toLocaleTimeString()
+  //   };
+  //   const updatedMessages = [...chatHistory, newUserMsg];
+  //   const trimmedMessages = updatedMessages.slice(-MAX_MESSAGES);
+
+  //   try {
+  //     const res = await askQuestion(trimmedMessages);
+  //     if (res.data.warning === 'no_document') {
+  //       alert("📄 Please upload a document before asking.");
+  //       return;
+  //     }
+  //     const botMsg = {
+  //       role: 'bot',
+  //       content: res.data.answer,
+  //       chunks: res.data.chunks_used || [],
+  //       context: res.data.context || '',
+  //       time: new Date().toLocaleTimeString()
+  //     };
+  //     setChatHistory([...updatedMessages, botMsg]);
+  //     setContextChunks(res.data.chunks_used || []);
+  //   } catch (err) {
+  //     console.error("Ask failed", err);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     if (!password || password.length !== 6) {

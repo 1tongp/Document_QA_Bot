@@ -10,7 +10,7 @@ import { Styles } from "../Constants/Styles";
 import Layout from "../Constants/Layout";
 
 function MainLayout({ messages, onUpload, onAsk, uploadedDocs }) {
-  const [showVectorPanel, setShowVectorPanel] = useState(true);
+  const [showVectorPanel, setShowVectorPanel] = useState(false);
   const [activeDocIndex, setActiveDocIndex] = useState(0);
 
   const documents = uploadedDocs.length > 0 ? uploadedDocs : ['No documents uploaded'];
