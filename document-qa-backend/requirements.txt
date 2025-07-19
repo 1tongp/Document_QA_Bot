@@ -53,3 +53,6 @@ pydantic_core==2.33.2
 sqlalchemy
 psycopg2-binary
 
+# Authentication
+Flask-Login
+Werkzeug
