@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import smtplib
 import os
 import random
-from routes.auth import auth_bp
+# from routes.auth import auth_bp
 
 load_dotenv()
 global current_code
@@ -20,8 +20,8 @@ CORS(app, resources={r"/*": {"origins": os.getenv("CORS_ORIGINS", "*").split(","
 # Register endpoints
 app.register_blueprint(ask_blueprint)
 app.register_blueprint(upload_blueprint)
-app.secret_key = "supersecretkey"  # Needed for Flask sessions
-app.register_blueprint(auth_bp)
+# app.secret_key = "supersecretkey"  # Needed for Flask sessions
+# app.register_blueprint(auth_bp)
 
 @app.route('/')
 def home():
