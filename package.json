@@ -1,0 +1,12 @@
+{
+  "name": "document-qa-bot",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "frontend": "npm --prefix document-qa-frontend start",
+    "backend": "cd document-qa-backend && source venv/bin/activate && FLASK_APP=app.py flask run --host=127.0.0.1 --port=5000"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
