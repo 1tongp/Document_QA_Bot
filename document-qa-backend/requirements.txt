@@ -12,10 +12,6 @@ pillow==11.2.1
 
 # Vector/Embedding Tools
 chromadb==0.4.24
-sentence-transformers==2.6.1
-torch==2.7.0
-transformers==4.52.3
-scikit-learn==1.6.1
 nltk==3.9.1
 openai==1.79.0
 
@@ -52,3 +48,6 @@ jiter==0.9.0
 MarkupSafe==3.0.2
 pydantic==2.11.4
 pydantic_core==2.33.2
+
+# Database
+psycopg2-binary
