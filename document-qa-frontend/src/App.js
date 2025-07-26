@@ -5,6 +5,7 @@ import ChatHistory from './components/Chat/ChatHistory';
 import { uploadPDF, askQuestion } from './services/api';
 import MainLayout from './layouts/MainLayout';
 import Login from './components/Authenication/Login';
+import HomeScreen from './pages/HomeScreen';
 
 function App() {
   const [chatHistory, setChatHistory] = useState([]);
@@ -69,12 +70,16 @@ function App() {
   if (!isLoggedIn) {
     return (
       <div style={styles.loginContainer}>
-        <Login
+        {/* <Login
           onLogin={(userInfo) => {
             setIsLoggedIn(true);
             setUser(userInfo);
           }}
-        />
+        /> */}
+        <HomeScreen onLogin={(userInfo) => {
+          setIsLoggedIn(true);
+          setUser(userInfo);
+        }} onRegisterClick={{}}/>
       </div>
     );
   }

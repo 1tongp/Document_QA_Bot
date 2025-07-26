@@ -19,7 +19,7 @@ function Login({ onLogin }) {
 
     return (
         <form onSubmit={handleSubmit} style={styles.form}>
-            <h1>Welcome to the Chat Bot System</h1>
+            <h2>Log in</h2>
             <input
                 type="text"
                 value={username}
