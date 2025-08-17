@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { fetchMyFiles } from '../../services/api';
 
-function UserFilesSidebar({ activeIndex, onSelect, user }) {
+function UserFilesSidebar({ activeIndex, onSelect, user, refreshKey }) {
     const [files, setFiles] = useState([]);
     const [error, setError] = useState('');
-    console.log("UserFilesSidebar mounted with user:", user);
 
     useEffect(() => {
         const loadFiles = async () => {
@@ -17,7 +16,7 @@ function UserFilesSidebar({ activeIndex, onSelect, user }) {
             }
         };
         loadFiles();
-    }, []);
+    }, [user.id, refreshKey]); // 👈 trigger re-fetch when refreshKey changes
 
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
@@ -29,5 +28,6 @@ function UserFilesSidebar({ activeIndex, onSelect, user }) {
         />
     );
 }
+
 
 export default UserFilesSidebar;

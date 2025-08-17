@@ -9,7 +9,7 @@ import { Colors } from "../Constants/Colors";
 import { Styles } from "../Constants/Styles";
 import Layout from "../Constants/Layout";
 
-function MainLayout({ messages, onUpload, onAsk, uploadedDocs, user }) {
+function MainLayout({ messages, onUpload, onAsk, uploadedDocs, user, refreshKey }) {
   const [showVectorPanel, setShowVectorPanel] = useState(false);
   const [activeDocIndex, setActiveDocIndex] = useState(-1);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -41,6 +41,7 @@ function MainLayout({ messages, onUpload, onAsk, uploadedDocs, user }) {
             activeIndex={activeDocIndex}
             onSelect={setActiveDocIndex}
             user={user}
+            refreshKey={refreshKey}
           />
         </div>
       )}

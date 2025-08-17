@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FileUpload from './components/Upload/FileUpload';
 import QuestionBox from './components/Chat/QuestionBox';
 import ChatHistory from './components/Chat/ChatHistory';
-import { uploadPDF, askQuestion } from './services/api';
+import { uploadPDF, askQuestion, fetchMyFiles } from './services/api';
 import MainLayout from './layouts/MainLayout';
 import Login from './components/Authenication/Login';
 import HomeScreen from './pages/HomeScreen';
@@ -13,7 +13,8 @@ function App() {
   const [uploadedDocs, setUploadedDocs] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [currentFileContent, setCurrentFileContent] = useState('');
   const MAX_MESSAGES = 12;
 
   const handlePDFUpload = async (file, user) => {
@@ -21,11 +22,16 @@ function App() {
     try {
       await uploadPDF(file, user.id);
       setUploadedDocs(prev => [...prev, file.name]);
+      setRefreshKey(prev => prev + 1);
       setChatHistory([]);
       setContextChunks([]);
     } catch (err) {
       console.error("Upload failed:", err);
     }
+  };
+  const handleFileSelect = async (filename) => {
+    const content = await fetchMyFiles(filename); // GET request
+    setCurrentFileContent(content);
   };
 
   const handleAsk = async (question) => {
@@ -99,6 +105,7 @@ function App() {
         onAsk={handleAsk}
         uploadedDocs={uploadedDocs}
         user={user}
+        refreshKey={refreshKey}
       />
     </>
   );

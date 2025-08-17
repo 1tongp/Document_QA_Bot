@@ -71,13 +71,13 @@ const styles = {
     title: {
         fontSize: '2rem',
         marginBottom: '16px',
-        textAlign: 'center',
+        // textAlign: 'center',
         textAlign: 'left'
     },
     description: {
         fontSize: '1rem',
         marginBottom: '20px',
-        textAlign: 'center',
+        // textAlign: 'center',
         textAlign: 'left'
     },
     bulletList: {
