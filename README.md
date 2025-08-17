@@ -35,10 +35,17 @@ source venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in `document-qa-backend/` and add your OpenAI key:
+#### Add a `.env` file:
 
+```env
+DATABASE_URL=postgresql://postgres:<password>@localhost:5432/docqa
+OPENAI_API_KEY=sk-xxxxxxxx
 ```
-OPENAI_API_KEY=your-api-key-here
+
+#### Initialize the DB (Local only for first time)
+
+```bash
+python init_db.py
 ```
 
 ---
@@ -77,13 +84,39 @@ This runs:
 
 ---
 
-## 🛠️ Tech Stack
+## ⚙️ Tech Stack
 
-* **Frontend**: React + Axios
-* **Backend**: Flask + Flask-CORS
-* **AI**: SentenceTransformers (`all-MiniLM-L6-v2`), OpenAI Chat Completion
-* **Vector DB**: FAISS
-* **Document Parsing**: PyMuPDF or pdfplumber
+| Layer    | Tech                           |
+| -------- | ------------------------------ |
+| Frontend | React, Axios                   |
+| Backend  | Flask, SQLAlchemy, Flask-Login |
+| AI       | OpenAI Chat API, Embedding API |
+| DB       | PostgreSQL (local + Render)    |
+| VectorDB | Chroma                  |
+
+
+---
+
+## 🔐 Production Setup
+
+### 🚣 PostgreSQL on Render
+
+* Create PostgreSQL instance on Render
+* Copy internal DB URL and set as:
+
+```env
+DATABASE_URL=postgresql://<user>:<pw>@<host>/<db>
+```
+
+* Add same to Render’s **Environment Variables**
+
+### 🟢 Frontend on Vercel
+
+* In Vercel project settings:
+
+  ```env
+  REACT_APP_API_BASE=https://document-qa-bot-wcfp.onrender.com/
+  ```
 
 ---
 
@@ -101,7 +134,7 @@ Solution 2: `PORT=3001 npm start` Run on another port
 
 ## 📌 Notes
 
-* This version uses in-memory FAISS index. In production, you should use a persistent store or per-user indexing.
+* This version uses in-memory ChromaDB index. In production, you should use a persistent store or per-user indexing.
 * Chunking is basic; you can improve it by using sentence/paragraph splitters.
 
 ---

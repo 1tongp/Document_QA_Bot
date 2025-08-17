@@ -86,12 +86,12 @@ function App() {
 
   return (
     <>
-      <header style={styles.header}>
+      {/* <header style={styles.header}>
         <h2>📄 Document QA Bot</h2>
         <div style={styles.profileIcon} onClick={() => window.location.href = '/profile'}>
           {user?.username?.charAt(0).toUpperCase() || 'U'}
         </div>
-      </header>
+      </header> */}
 
       <MainLayout
         messages={chatHistory}

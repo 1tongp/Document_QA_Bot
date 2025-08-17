@@ -39,7 +39,7 @@ const styles = {
     padding: 0,
   },
   item: {
-    ...Styles.body1,
+    ...Styles.body,
     color: Colors.taupeLight,
     padding: '10px',
     cursor: 'pointer',

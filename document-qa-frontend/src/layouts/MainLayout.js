@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import UserFilesSidebar from "../components/Sidebar/UserFilesSidebar";
 import FileUpload from "../components/Upload/FileUpload";
 import ChatHistory from "../components/Chat/ChatHistory";
@@ -11,7 +11,9 @@ import Layout from "../Constants/Layout";
 
 function MainLayout({ messages, onUpload, onAsk, uploadedDocs, user }) {
   const [showVectorPanel, setShowVectorPanel] = useState(false);
-  const [activeDocIndex, setActiveDocIndex] = useState(0);
+  const [activeDocIndex, setActiveDocIndex] = useState(-1);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const toggleSidebar = () => setShowSidebar(prev => !prev);
 
   const documents = uploadedDocs.length > 0 ? uploadedDocs : ['No documents uploaded'];
 
@@ -22,15 +24,27 @@ function MainLayout({ messages, onUpload, onAsk, uploadedDocs, user }) {
 
   return (
     <div style={styles.mainLayout}>
-      <div style={styles.sidebar}>
-        <UserFilesSidebar
-          activeIndex={activeDocIndex}
-          onSelect={setActiveDocIndex}
-          user={user}
-        />
+      <button
+        onClick={toggleSidebar}
+        style={{
+          ...styles.sidebarToggleButton,
+          left: showSidebar ? "200px" : "0px"
+        }}
+      >
+        {showSidebar ? "←" : "→"}
+      </button>
 
 
-      </div>
+      {showSidebar && (
+        <div style={styles.sidebar}>
+          <UserFilesSidebar
+            activeIndex={activeDocIndex}
+            onSelect={setActiveDocIndex}
+            user={user}
+          />
+        </div>
+      )}
+
       <div
         style={{
           ...styles.chatPanelWrapper,
@@ -113,7 +127,7 @@ const styles = {
     backgroundColor: Colors.charcoal,
     flexShrink: 0,
   },
-  
+
   // vectorInfo: {
   //   width: "240px",
   //   padding: "24px",
@@ -141,8 +155,21 @@ const styles = {
     color: "#fff",
     cursor: "pointer",
     zIndex: 1000
+  },
+
+  sidebarToggleButton: {
+    position: "absolute",
+    top: "24px",
+    fontSize: "24px",
+    background: "none",
+    border: "none",
+    color: "#fff",
+    cursor: "pointer",
+    zIndex: 1000,
+    transition: "left 0.3s ease",
   }
-  
-  
+
+
+
 };
 export default MainLayout;
