@@ -37,9 +37,14 @@ pip install -r requirements.txt
 
 #### Add a `.env` file:
 
-```env
-DATABASE_URL=postgresql://postgres:<password>@localhost:5432/docqa
+```env for backend
+DATABASE_URL=postgresql://<postgresuser>:<password>@localhost:5432/docqa
 OPENAI_API_KEY=sk-xxxxxxxx
+CORS_ORIGINS=http://localhost:3000
+```
+
+``` env for frontend
+REACT_APP_API_BASE=http://127.0.0.1:5000
 ```
 
 #### Initialize the DB (Local only for first time)

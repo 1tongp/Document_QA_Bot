@@ -20,3 +20,4 @@ coverage/
 
 # === VS Code ===
 .vscode/
+.venv/
